@@ -67,6 +67,8 @@ namespace dotnet.redux
 
                 // Set the current state
                 CurrentState = States.Last().Key;
+                
+                EventHandler(this, CurrentState);
             });
         }
 

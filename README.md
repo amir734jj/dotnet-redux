@@ -1,5 +1,5 @@
 # dotnet-redux
-Simple redux implementation in C# dotnet core
+Simple redux implementation in C# dotnet core. See the unit test project for more examples.
 
 ```csharp
 // Build redux instance

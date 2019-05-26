@@ -1,6 +1,6 @@
 namespace dotnet.redux.Extensions
 {
-    public static class ObjectExtension
+    internal static class ObjectExtension
     {
         public static bool IsDefault<T>(this T value) where T : struct
         {

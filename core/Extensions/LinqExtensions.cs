@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace dotnet.redux.Extensions
 {
-    public static class LinqExtension
+    internal static class LinqExtension
     {
         /// <summary>
         /// ForEach for IEnumerable

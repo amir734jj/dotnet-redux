@@ -22,7 +22,7 @@ namespace core.Tests
             // Act, Assert
             Assert.Equal(initialState, redux.CurrentState);
             Assert.Single(redux.States);
-            Assert.Contains(redux.States, x => x == initialState);
+            Assert.Contains(redux.States.Select(x => x.Key), x => x == initialState);
         }
 
         [Fact]

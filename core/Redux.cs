@@ -17,8 +17,6 @@ namespace dotnet.redux
         private readonly Action<TState, IAction<TActionType>> _errorHandler;
         private readonly ImmutableDictionary<Func<TActionType, bool>, Func<TState, IAction<TActionType>, TState>> _reducers;
         private readonly Func<TState, TState> _middleware;
-        
-        private ImmutableList<KeyValuePair<TState, DateTime>> _states;
 
         public Redux(TState initialState, Action<TState, IAction<TActionType>> errorHandler,
             Func<TState, TState> middleware, ImmutableDictionary<Func<TActionType, bool>, Func<TState, IAction<TActionType>, TState>> reducers)
@@ -26,7 +24,7 @@ namespace dotnet.redux
             _errorHandler = errorHandler;
             _middleware = middleware;
             _reducers = reducers;
-            _states = ImmutableList<KeyValuePair<TState, DateTime>>.Empty.Add(new KeyValuePair<TState, DateTime>(initialState, DateTime.Now));
+            States = ImmutableList<KeyValuePair<TState, DateTime>>.Empty.Add(new KeyValuePair<TState, DateTime>(initialState, DateTime.Now));
             CurrentState = initialState;
         }
 
@@ -42,7 +40,7 @@ namespace dotnet.redux
 
                 if (targetReducer.IsDefault())
                 {
-                    _errorHandler(_states.LastOrDefault().Key, action);
+                    _errorHandler(States.LastOrDefault().Key, action);
                     
                     throw new ReducerMatchException<TActionType>(action.Type);
                 }
@@ -54,17 +52,17 @@ namespace dotnet.redux
                 updatedState = _middleware(updatedState);
 
                 // Add new state to list of states
-                _states = _states.Add(new KeyValuePair<TState, DateTime>(updatedState, DateTime.Now)).TakeLast(StatesCountLimit).ToImmutableList();
+                States = States.Add(new KeyValuePair<TState, DateTime>(updatedState, DateTime.Now)).TakeLast(StatesCountLimit).ToImmutableList();
 
                 // Set the current state
-                CurrentState = _states.Last().Key;
+                CurrentState = States.Last().Key;
             });
         }
 
         public EventHandler<TState> EventHandler { get; set; }
 
-        public TState CurrentState { get; private set; } 
+        public TState CurrentState { get; private set; }
 
-        public ImmutableList<TState> States => _states.Select(x => x.Key).ToImmutableList();
+        public ImmutableList<KeyValuePair<TState, DateTime>> States { get; private set; }
     }
 }

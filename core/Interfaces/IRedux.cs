@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
 
@@ -14,6 +15,6 @@ namespace dotnet.redux.Interfaces
         
         TState CurrentState { get; }
         
-        ImmutableList<TState> States { get; }
+        ImmutableList<KeyValuePair<TState, DateTime>> States { get; }
     }
 }

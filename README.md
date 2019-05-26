@@ -7,8 +7,14 @@ State initialState = new State();
 
 IRedux<State, ActionEnums> redux = ReduxBuilder.New<State, ActionEnums>()
     .WithInitialState(initialState)
-    .WithErrorHandler((x, y) => { })
-    .WithMiddleware(x => x)
+    .WithErrorHandler((x, y) => {
+        // Log the exception if any ...
+    })
+    .WithMiddleware(x => {
+        // This func is called after state has been updated; this is the place to modify the state
+        // just before state being finalized
+        return x;
+    })
     .WithReducer<AddAction>(x => x == ActionEnums.Add, (state, addAction) =>
     {
         return new State {Values = state.Values.Add(addAction.Value)};

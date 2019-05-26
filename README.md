@@ -36,7 +36,7 @@ State currenState = redux.CurrentState;
 ImmutableList<KeyValuePair<State, DateTime>> states = redux.States;
 
 // Listen to changes
-redux.EventHandler += (_, state) => {
+redux.EventHandler += (reduxInstance, state) => {
     // Listen to any changes to redux
 }
 ```

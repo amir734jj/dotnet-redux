@@ -31,6 +31,7 @@ await redux.Dispatch(new DeleteAction {Value = "Item1"});
 await redux.Dispatch(new AddAction {Value = "Item2"});
 
 // Get current states and states
+// Note that states contains the last n = 10 states with timestamp of when they are created
 State currenState = redux.CurrentState;
 ImmutableList<KeyValuePair<State, DateTime>> states = redux.States;
 ```

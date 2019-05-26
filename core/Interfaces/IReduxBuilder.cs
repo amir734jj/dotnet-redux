@@ -13,7 +13,7 @@ namespace dotnet.redux.Interfaces
         where TState : IState
         where TActionType : Enum
     {
-        IReduxBuilderWithMiddleware<TState, TActionType> WithErrorHandler(Action<TState, IAction<TActionType>> errorHandler);
+        IReduxBuilderWithMiddleware<TState, TActionType> WithErrorHandler(Action<TState, IAction<TActionType>, Exception> errorHandler);
     }
 
     public interface IReduxBuilderWithMiddleware<TState, TActionType>

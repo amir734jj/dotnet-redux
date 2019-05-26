@@ -15,7 +15,7 @@ namespace core.Tests
             
             var redux = ReduxBuilder.New<State, ActionEnums>()
                 .WithInitialState(initialState)
-                .WithErrorHandler((x, y) => { })
+                .WithErrorHandler((state, action, exception) => { })
                 .WithMiddleware(x => x)
                 .Build();
             
@@ -33,8 +33,8 @@ namespace core.Tests
             
             var redux = ReduxBuilder.New<State, ActionEnums>()
                 .WithInitialState(initialState)
-                .WithErrorHandler((x, y) => { })
-                .WithMiddleware(x => x)
+                .WithErrorHandler((state, action, exception) => { })
+                .WithMiddleware(state => state)
                 .WithReducer<AddAction>(x => x == ActionEnums.Add, (state, addAction) =>
                 {
                     // ReSharper disable once ConvertToLambdaExpression

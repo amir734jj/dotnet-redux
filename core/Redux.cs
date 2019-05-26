@@ -14,11 +14,11 @@ namespace dotnet.redux
         where TState: IState
         where TActionType: Enum
     {
-        private readonly Action<TState, IAction<TActionType>> _errorHandler;
+        private readonly Action<TState, IAction<TActionType>, Exception> _errorHandler;
         private readonly ImmutableDictionary<Func<TActionType, bool>, Func<TState, IAction<TActionType>, TState>> _reducers;
         private readonly Func<TState, TState> _middleware;
 
-        public Redux(TState initialState, Action<TState, IAction<TActionType>> errorHandler,
+        public Redux(TState initialState, Action<TState, IAction<TActionType>, Exception> errorHandler,
             Func<TState, TState> middleware, ImmutableDictionary<Func<TActionType, bool>, Func<TState, IAction<TActionType>, TState>> reducers)
         {
             _errorHandler = errorHandler;
@@ -40,14 +40,25 @@ namespace dotnet.redux
 
                 if (targetReducer.IsDefault())
                 {
-                    _errorHandler(States.LastOrDefault().Key, action);
+                    _errorHandler(States.LastOrDefault().Key, action, new Exception($"Failed to find a reducer for action type: {action.Type}"));
                     
                     throw new ReducerMatchException<TActionType>(action.Type);
                 }
 
-                // Update the state
-                var updatedState = targetReducer.Value(CurrentState, action);
+                var updatedState = CurrentState;
 
+                try
+                {
+                    // Update the state
+                    updatedState = targetReducer.Value(CurrentState, action);
+                }
+                catch (Exception e)
+                {
+                    _errorHandler(States.LastOrDefault().Key, action, e);
+
+                    throw;
+                }
+                
                 // Run updated state through middleware
                 updatedState = _middleware(updatedState);
 

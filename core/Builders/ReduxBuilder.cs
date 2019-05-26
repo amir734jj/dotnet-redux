@@ -36,7 +36,7 @@ namespace dotnet.redux.Builders
             _initialState = initialState;
         }
 
-        public IReduxBuilderWithMiddleware<TState, TActionType> WithErrorHandler(Action<TState, IAction<TActionType>> errorHandler)
+        public IReduxBuilderWithMiddleware<TState, TActionType> WithErrorHandler(Action<TState, IAction<TActionType>, Exception> errorHandler)
         {
             return new ReduxBuilderWithMiddleware<TState, TActionType>(_initialState, errorHandler);
         }
@@ -47,9 +47,9 @@ namespace dotnet.redux.Builders
         where TActionType: Enum
     {
         private readonly TState _initialState;
-        private readonly Action<TState, IAction<TActionType>> _errorHandler;
+        private readonly Action<TState, IAction<TActionType>, Exception> _errorHandler;
 
-        public ReduxBuilderWithMiddleware(TState initialState, Action<TState, IAction<TActionType>> errorHandler)
+        public ReduxBuilderWithMiddleware(TState initialState, Action<TState, IAction<TActionType>, Exception> errorHandler)
         {
             _initialState = initialState;
             _errorHandler = errorHandler;
@@ -66,11 +66,11 @@ namespace dotnet.redux.Builders
         where TActionType: Enum
     {
         private readonly TState _initialState;
-        private readonly Action<TState, IAction<TActionType>> _errorHandler;
+        private readonly Action<TState, IAction<TActionType>, Exception> _errorHandler;
         private ImmutableDictionary<Func<TActionType, bool>, Func<TState, IAction<TActionType>, TState>> _reducers;
         private readonly Func<TState, TState> _middleware;
 
-        public ReduxBuilderReducers(TState initialState, Action<TState, IAction<TActionType>> errorHandler, Func<TState, TState> middleware)
+        public ReduxBuilderReducers(TState initialState, Action<TState, IAction<TActionType>, Exception> errorHandler, Func<TState, TState> middleware)
         {
             _initialState = initialState;
             _errorHandler = errorHandler;

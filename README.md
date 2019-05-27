@@ -13,7 +13,7 @@ IRedux<State, ActionEnums> redux = ReduxBuilder.New<State, ActionEnums>()
     .WithMiddleware(state => {
         // This func is called after state has been updated; this is the place to modify the state
         // just before state being finalized
-        return x;
+        return state;
     })
     .WithReducer<AddAction>(x => x == ActionEnums.Add, (state, addAction) =>
     {

@@ -13,14 +13,16 @@ IRedux<State, ActionEnums> redux = ReduxBuilder.New<State, ActionEnums>()
     .WithMiddleware(state => {
         // This func is called after state has been updated; this is the place to modify the state
         // just before state being finalized
-        return x;
+        return state;
     })
     .WithReducer<AddAction>(ActionEnums.Add, (state, addAction) =>
     {
+        // Return an updated state
         return new State {Values = state.Values.Add(addAction.Value)};
     })
     .WithReducer<DeleteAction>(ActionEnums.Delete, (state, deleteAction) =>
     {
+        // Return an updated state
         return new State {Values = state.Values.Remove(deleteAction.Value)};
     })
     .Build();
@@ -31,12 +33,12 @@ await redux.Dispatch(new DeleteAction {Value = "Item1"});
 await redux.Dispatch(new AddAction {Value = "Item2"});
 
 // Get current states and states
-// Note that states contains the last n = 10 states with timestamp of when they are created
+// Note that states contains the last n = 100 states with timestamp of when they are created
 State currenState = redux.CurrentState;
 ImmutableList<KeyValuePair<State, DateTime>> states = redux.States;
 
 // Listen to changes
-redux.EventHandler += (_, state) => {
+redux.EventHandler += (reduxInstance, state) => {
     // Listen to any changes to redux
 }
 ```

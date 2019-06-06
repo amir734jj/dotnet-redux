@@ -45,7 +45,7 @@ namespace dotnet.redux
                     throw new ReducerMatchException<TActionType>(action.Type);
                 }
 
-                var updatedState = CurrentState;
+                TState updatedState;
 
                 try
                 {

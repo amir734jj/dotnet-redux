@@ -15,11 +15,11 @@ namespace dotnet.redux
         where TActionType: Enum
     {
         private readonly Action<TState, IAction<TActionType>, Exception> _errorHandler;
-        private readonly ImmutableDictionary<Func<TActionType, bool>, Func<TState, IAction<TActionType>, TState>> _reducers;
+        private readonly ImmutableDictionary<TActionType, Func<TState, IAction<TActionType>, TState>> _reducers;
         private readonly Func<TState, TState> _middleware;
 
         public Redux(TState initialState, Action<TState, IAction<TActionType>, Exception> errorHandler,
-            Func<TState, TState> middleware, ImmutableDictionary<Func<TActionType, bool>, Func<TState, IAction<TActionType>, TState>> reducers)
+            Func<TState, TState> middleware, ImmutableDictionary<TActionType, Func<TState, IAction<TActionType>, TState>> reducers)
         {
             _errorHandler = errorHandler;
             _middleware = middleware;
@@ -36,7 +36,7 @@ namespace dotnet.redux
         {
             await Task.Factory.StartNew(() =>
             {
-                var targetReducer = _reducers.FirstOrDefault(x => x.Key(action.Type));
+                var targetReducer = _reducers.GetValueOrDefault(action.Type, null);
 
                 if (targetReducer.IsDefault())
                 {
@@ -50,7 +50,7 @@ namespace dotnet.redux
                 try
                 {
                     // Update the state
-                    updatedState = targetReducer.Value(CurrentState, action);
+                    updatedState = targetReducer(CurrentState, action);
                 }
                 catch (Exception e)
                 {

@@ -15,11 +15,11 @@ IRedux<State, ActionEnums> redux = ReduxBuilder.New<State, ActionEnums>()
         // just before state being finalized
         return x;
     })
-    .WithReducer<AddAction>(x => x == ActionEnums.Add, (state, addAction) =>
+    .WithReducer<AddAction>(ActionEnums.Add, (state, addAction) =>
     {
         return new State {Values = state.Values.Add(addAction.Value)};
     })
-    .WithReducer<DeleteAction>(x => x == ActionEnums.Delete, (state, deleteAction) =>
+    .WithReducer<DeleteAction>(ActionEnums.Delete, (state, deleteAction) =>
     {
         return new State {Values = state.Values.Remove(deleteAction.Value)};
     })

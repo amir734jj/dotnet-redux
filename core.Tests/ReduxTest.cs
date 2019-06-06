@@ -35,12 +35,12 @@ namespace core.Tests
                 .WithInitialState(initialState)
                 .WithErrorHandler((state, action, exception) => { })
                 .WithMiddleware(state => state)
-                .WithReducer<AddAction>(x => x == ActionEnums.Add, (state, addAction) =>
+                .WithReducer<AddAction>(ActionEnums.Add, (state, addAction) =>
                 {
                     // ReSharper disable once ConvertToLambdaExpression
                     return new State {Values = state.Values.Add(addAction.Value)};
                 })
-                .WithReducer<DeleteAction>(x => x == ActionEnums.Delete, (state, deleteAction) =>
+                .WithReducer<DeleteAction>(ActionEnums.Delete, (state, deleteAction) =>
                 {
                     // ReSharper disable once ConvertToLambdaExpression
                     return new State {Values = state.Values.Remove(deleteAction.Value)};

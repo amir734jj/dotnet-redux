@@ -67,7 +67,7 @@ namespace dotnet.redux.Builders
     {
         private readonly TState _initialState;
         private readonly Action<TState, IAction<TActionType>, Exception> _errorHandler;
-        private ImmutableDictionary<Func<TActionType, bool>, Func<TState, IAction<TActionType>, TState>> _reducers;
+        private ImmutableDictionary<TActionType, Func<TState, IAction<TActionType>, TState>> _reducers;
         private readonly Func<TState, TState> _middleware;
 
         public ReduxBuilderReducers(TState initialState, Action<TState, IAction<TActionType>, Exception> errorHandler, Func<TState, TState> middleware)
@@ -75,13 +75,13 @@ namespace dotnet.redux.Builders
             _initialState = initialState;
             _errorHandler = errorHandler;
             _middleware = middleware;
-            _reducers = ImmutableDictionary<Func<TActionType, bool>, Func<TState, IAction<TActionType>, TState>>.Empty;
+            _reducers = ImmutableDictionary<TActionType, Func<TState, IAction<TActionType>, TState>>.Empty;
         }
 
-        public IReduxBuilderReducers<TState, TActionType> WithReducer<TAction>(Func<TActionType, bool> predicate, Func<TState, TAction, TState> handler)
+        public IReduxBuilderReducers<TState, TActionType> WithReducer<TAction>(TActionType actionType, Func<TState, TAction, TState> handler)
             where TAction: IAction<TActionType>
         {
-            _reducers = _reducers.Add(predicate, (x, y) =>
+            _reducers = _reducers.Add(actionType, (x, y) =>
             {
                 switch (y)
                 {
